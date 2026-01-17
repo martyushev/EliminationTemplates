@@ -1,4 +1,5 @@
 % Input: coefficient matrix C of size 4x18
+% Output: solution matrix S of size 4x20
 
 function S = std_65x85_colpiv_pose_quiver(C)
 
@@ -29,9 +30,6 @@ function S = std_65x85_colpiv_pose_quiver(C)
 
     [V,~] = eig(T);
     S = V(16:19,:)./repmat(V(20,:),4,1);
-
-    I = ~isnan(S(1,:)) & ~isinf(S(1,:));
-    %I = I & ~imag(S(1,:)); % uncomment this line for real roots only
-    S = S(:,I);
+    S = S(:,all(isfinite(S)));
 
 end

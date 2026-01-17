@@ -1,6 +1,7 @@
 import numpy as np
 
 def coefs_toy(data):
+
     A = data[0].T.flat
 
     C = np.zeros((3,10))
@@ -9,9 +10,12 @@ def coefs_toy(data):
     C.flat[19] = A[1]
     C.flat[29] = A[2]
 
-    C = C/np.sqrt(np.sum(C*np.conj(C),axis=1,keepdims=True))
+    C = C/np.linalg.norm(C,axis=1,keepdims=True)
 
-    def U(x,y,z):
-        return np.array([x**3,y**3,z**2*x,x**2,y*x,y**2,y*z,z**2,z,1])
+    def U(s):
+        return np.array([s[0]**3,s[1]**3,s[0]*s[2]**2,s[0]**2,s[1]*s[0],s[1]**2,s[1]*s[2],s[2]**2,s[2],1])
 
-    return C,U
+    def dU(s):
+        return np.column_stack([[3*s[0]**2,0,s[2]**2,2*s[0],s[1],0,0,0,0,0],[0,3*s[1]**2,0,0,s[0],2*s[1],s[2],0,0,0],[0,0,2*s[0]*s[2],0,0,0,s[1],2*s[2],1,0]])
+
+    return C,U,dU

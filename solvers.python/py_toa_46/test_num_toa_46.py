@@ -1,25 +1,27 @@
 from numpy.random import seed
 from time import time
-from _common import ini_stats, update_stats, disp_stats
+from _common import ini_stats, validate_roots, update_stats, disp_stats
 from py_toa_46 import inidata_num_toa_46, coefs_toa_46, red_427x475_toa_46
 
 def test_num_toa_46():
+
     seed(23)
-    N = 1000
-    d = 38
-
     stats = ini_stats('toa_46')
+    stats['solver'] = 'red_427x475_toa_46'
+    stats['nroots'] = 38
+    stats['ntrials'] = 10**3
+    stats['iterref'] = 0
 
-    for i in range(N):
-        data = inidata_num_toa_46()
-        C,U = coefs_toa_46(data)
+    for i in range(stats['ntrials']):
 
         tic = time()
-        S = red_427x475_toa_46(C)
-        stats['tm'].append(time()-tic)
-        if S is None:
-            continue
+        data = inidata_num_toa_46()
+        C,U,dU = coefs_toa_46(data)
+        solver_func = globals().get(stats['solver'])
+        S = solver_func(C)
+        S,Ir,e = validate_roots(S,C,U,dU,stats['nroots'],stats['iterref'])
 
-        stats = update_stats(stats,S,C,U,d)
+        stats['tm'].append(time()-tic)
+        stats = update_stats(stats,Ir,e)
 
     disp_stats(stats)

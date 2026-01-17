@@ -201,19 +201,45 @@ deg := proc(F, tord, pp, indvars:={})
 end proc:</Text-field>
 </Input>
 </Group>
-<Group view="code" labelreference="L4133" drawlabel="true" applyint="true" applyrational="true" applyexponent="false">
+<Group view="code" labelreference="L4136" drawlabel="true" applyint="true" applyrational="true" applyexponent="false">
 <Input><Text-field prompt="&gt; " style="Maple Input" layout="Normal">### find roots at infinity
-inftyRoots := proc(F, tord, pp)
-    local Gr, hGr, h:
-    Gr := gb(F, tord, pp):
-    hGr := Groebner[Homogenize](Gr, h):
-    return msolve(subs(h=0, {hGr[]}), pp):
+rootsAtInfinity := proc(F::list, vars::list)
+    local h_h, F_hom, F_inf, sols, s, v:
+    F_hom := Groebner[Homogenize](F, h_h):
+    F_inf := subs(h_h = 0, F_hom):
+    sols := solve({F_inf[]}, {vars[]}):
+    if sols = NULL then
+        return []:
+    else # remove trivial solution
+        return remove(pt-&gt;andmap(c-&gt;evalb(c = 0), pt), [seq([seq(eval(v, s), v in vars)], s in [sols])]):
+    end if:
+end proc:</Text-field>
+</Input>
+</Group>
+<Group view="code" labelreference="L4137" drawlabel="true" applyint="true" applyrational="true" applyexponent="false">
+<Input><Text-field prompt="&gt; " style="Maple Input" layout="Normal">### solve polynomial system by the Groebner basis method
+gbsolver := proc(F::list, vars::list, nDigits:=30)
+    local tord, G, B, deg, av, vr, T, V, NF:
+    Digits := nDigits:
+    tord := tdeg(vars[]):
+    if not type(F, list(polynom)) then error(&quot;the case of non-polynomial system is not handled&quot;): end if:
+    G := Groebner[Basis](F, tord):
+    B := Groebner[NormalSet](G, tord)[1]:
+    deg := numelems(B):
+    av := add(vr*rnd(), vr in vars):
+    T := Groebner[MultiplicationMatrix](av, B, table(B=~[$1..deg]), G, tord):
+    V := LinearAlgebra[Eigenvectors](evalf(T))[2]:
+    V := V/~(Vector(deg, fill=1).V[1]):
+    NF := map(vr-&gt;Groebner[NormalForm](vr, G, tord), vars):
+    T := map(pl-&gt;table(sparse, zip((a,b)-&gt;b=a, [coeffs(pl, vars, 'mn')], [mn])), NF):
+    T := Matrix(map(t-&gt;map(b-&gt;t[b], B), T)):
+    return convert((T.V)^+, listlist):
 end proc:</Text-field>
 </Input>
 </Group>
 <Group view="code" hide-input="false" labelreference="L4123" drawlabel="true" applyint="true" applyrational="true" applyexponent="false">
 <Input><Text-field prompt="&gt; " style="Maple Input" layout="Normal">### save polynomial system and (optional) procedure for constructing coefficients
-saveF := proc(prob, F, C_prob:=NULL)
+saveF := proc(prob, F::list, C_prob:=NULL)
     local fn := cat(&quot;F_&quot;, prob, &quot;.m&quot;):
     cat(F_, prob) := F:
     if C_prob=NULL then
@@ -259,7 +285,8 @@ samePattern,
 gb,
 dim,
 deg,
-inftyRoots,
+rootsAtInfinity,
+gbsolver,
 saveF,
 &quot;_common.m&quot;:</Text-field>
 </Input>

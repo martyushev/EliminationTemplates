@@ -15,11 +15,7 @@ function S = nstd_26x34_toy(C)
     T([5,14,39,56]) = 1;
 
     [V,~] = eig(T);
-    S = V(1:2,:)./repmat(V(8,:),2,1);
-
-
-    I = ~isnan(S(1,:)) & ~isinf(S(1,:));
-    %I = I & ~imag(S(1,:)); % uncomment this line for real roots only
-    S = S(:,I);
+    S = V(6:7,:)./repmat(V(8,:),2,1);
+    S = S(:,all(isfinite(S)));
 
 end

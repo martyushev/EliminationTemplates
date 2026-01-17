@@ -1,0 +1,4 @@
+from .inidata_num_kuramoto_oscillator import inidata_num_kuramoto_oscillator
+from .coefs_kuramoto_oscillator import coefs_kuramoto_oscillator
+from .red_87x110_kuramoto_oscillator import red_87x110_kuramoto_oscillator
+from .test_num_kuramoto_oscillator import test_num_kuramoto_oscillator

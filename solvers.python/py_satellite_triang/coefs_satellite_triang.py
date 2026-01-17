@@ -1,6 +1,7 @@
 import numpy as np
 
 def coefs_satellite_triang(data):
+
     c1 = data[0].T.flat
     c2 = data[1].T.flat
     c3 = data[2].T.flat
@@ -67,9 +68,12 @@ def coefs_satellite_triang(data):
     C.flat[41] = c3[18]
     C.flat[40] = c3[19]
 
-    C = C/np.sqrt(np.sum(C*np.conj(C),axis=1,keepdims=True))
+    C = C/np.linalg.norm(C,axis=1,keepdims=True)
 
-    def U(x,y,z):
-        return np.array([x**3,y*x**2,y**2*x,y**3,x**2*z,x*y*z,y**2*z,x*z**2,y*z**2,z**3,x**2,x*y,y**2,x*z,y*z,z**2,x,y,z,1])
+    def U(s):
+        return np.array([s[0]**3,s[1]*s[0]**2,s[0]*s[1]**2,s[1]**3,s[2]*s[0]**2,s[1]*s[0]*s[2],s[1]**2*s[2],s[0]*s[2]**2,s[1]*s[2]**2,s[2]**3,s[0]**2,s[1]*s[0],s[1]**2,s[0]*s[2],s[1]*s[2],s[2]**2,s[0],s[1],s[2],1])
 
-    return C,U
+    def dU(s):
+        return np.column_stack([[3*s[0]**2,2*s[1]*s[0],s[1]**2,0,2*s[0]*s[2],s[1]*s[2],0,s[2]**2,0,0,2*s[0],s[1],0,s[2],0,0,1,0,0,0],[0,s[0]**2,2*s[1]*s[0],3*s[1]**2,0,s[0]*s[2],2*s[1]*s[2],0,s[2]**2,0,0,s[0],2*s[1],0,s[2],0,0,1,0,0],[0,0,0,0,s[0]**2,s[1]*s[0],s[1]**2,2*s[0]*s[2],2*s[1]*s[2],3*s[2]**2,0,0,0,s[0],s[1],2*s[2],0,0,1,0]])
+
+    return C,U,dU

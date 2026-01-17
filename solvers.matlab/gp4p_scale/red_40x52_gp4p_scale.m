@@ -18,7 +18,7 @@ function S = red_40x52_gp4p_scale(C)
     T1([14,79]) = 1;
 
     [V,~] = eig(T0,T1);
-    S = V(7:11,:)./repmat(V(12,:),5,1);
+    S = V(7:11,:)./V(12,:);
     S = S(:,all(isfinite(S)));
 
 end

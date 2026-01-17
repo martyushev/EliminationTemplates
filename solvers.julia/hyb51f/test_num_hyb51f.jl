@@ -6,20 +6,25 @@ include("red_598x684_hyb51f.jl")
 function test_num_hyb51f()
 
     Random.seed!(23)
-    N = 10000
-    d = 56
-
     stats = ini_stats("hyb51f")
+    stats.solver = "red_598x684_hyb51f"
+    stats.nroots = 56
+    stats.ntrials = 10^4
+    stats.iterref = 0
 
-    for i in 1:N
-        data = inidata_num_hyb51f()
-        C,U = coefs_hyb51f(data)
+    for i in 1:stats.ntrials
 
-        toc = @elapsed S = red_598x684_hyb51f(C)
+        toc = @elapsed begin
+            data = inidata_num_hyb51f()
+            C,U,dU = coefs_hyb51f(data)
+
+            S = eval(Meta.parse(stats.solver))(C)
+            S,Ir,e = validate_roots(S,C,U,dU,stats.nroots,stats.iterref)
+        end
+
         stats.tm = [stats.tm; toc]
-        if isempty(S); continue; end
+        stats = update_stats(stats,Ir,e)
 
-        stats = update_stats(stats,S,C,U,d)
     end
 
     disp_stats(stats)

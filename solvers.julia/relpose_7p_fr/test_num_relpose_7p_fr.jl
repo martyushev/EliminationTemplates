@@ -6,20 +6,25 @@ include("red_138x210_relpose_7p_fr.jl")
 function test_num_relpose_7p_fr()
 
     Random.seed!(23)
-    N = 10000
-    d = 68
-
     stats = ini_stats("relpose_7p_fr")
+    stats.solver = "red_138x210_relpose_7p_fr"
+    stats.nroots = 68
+    stats.ntrials = 10^4
+    stats.iterref = 0
 
-    for i in 1:N
-        data = inidata_num_relpose_7p_fr()
-        C,U = coefs_relpose_7p_fr(data)
+    for i in 1:stats.ntrials
 
-        toc = @elapsed S = red_138x210_relpose_7p_fr(C)
+        toc = @elapsed begin
+            data = inidata_num_relpose_7p_fr()
+            C,U,dU = coefs_relpose_7p_fr(data)
+
+            S = eval(Meta.parse(stats.solver))(C)
+            S,Ir,e = validate_roots(S,C,U,dU,stats.nroots,stats.iterref)
+        end
+
         stats.tm = [stats.tm; toc]
-        if isempty(S); continue; end
+        stats = update_stats(stats,Ir,e)
 
-        stats = update_stats(stats,S,C,U,d)
     end
 
     disp_stats(stats)

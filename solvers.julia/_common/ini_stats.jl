@@ -2,6 +2,10 @@
 
 mutable struct Stats
     const name::String         # problem name
+    solver::String             # solver
+    nroots::Int                # number of roots
+    ntrials::Int               # number of trials
+    iterref::Int               # iterative refinement
     tm::Vector{Float64}        # timing
     err::Vector{Float64}       # numerical error
     flr::Vector{Float64}       # failure
@@ -12,7 +16,7 @@ end
 
 function ini_stats(prob)
 
-    stats = Stats(prob, [], [], [], [], [], []);
-    return stats;
+    stats = Stats(prob,"",0,0,0,[],[],[],[],[],[])
+    return stats
 
 end

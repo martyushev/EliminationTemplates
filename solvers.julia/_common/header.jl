@@ -4,8 +4,10 @@ using Random
 using Statistics
 using Printf
 
-include("../_common/ini_stats.jl")
-include("../_common/update_stats.jl")
-include("../_common/disp_stats.jl")
-include("../_common/getT.jl")
-include("../_common/skew.jl")
+include("ini_stats.jl")
+include("validate_roots.jl")
+include("update_stats.jl")
+include("disp_stats.jl")
+include("iter_ref.jl")
+include("getT.jl")
+include("skew.jl")

@@ -1,4 +1,5 @@
 % Input: coefficient matrix C of size 6x16
+% Output: solution matrix S of size 6x20
 
 function S = std_120x140_colpiv_r6p(C)
 
@@ -29,9 +30,6 @@ function S = std_120x140_colpiv_r6p(C)
 
     [V,~] = eig(T);
     S = V(14:19,:)./repmat(V(20,:),6,1);
-
-    I = ~isnan(S(1,:)) & ~isinf(S(1,:));
-    %I = I & ~imag(S(1,:)); % uncomment this line for real roots only
-    S = S(:,I);
+    S = S(:,all(isfinite(S)));
 
 end

@@ -6,20 +6,25 @@ include("red_38x58_refract5p.jl")
 function test_num_refract5p()
 
     Random.seed!(23)
-    N = 10000
-    d = 16
-
     stats = ini_stats("refract5p")
+    stats.solver = "red_38x58_refract5p"
+    stats.nroots = 16
+    stats.ntrials = 10^4
+    stats.iterref = 0
 
-    for i in 1:N
-        data = inidata_num_refract5p()
-        C,U = coefs_refract5p(data)
+    for i in 1:stats.ntrials
 
-        toc = @elapsed S = red_38x58_refract5p(C)
+        toc = @elapsed begin
+            data = inidata_num_refract5p()
+            C,U,dU = coefs_refract5p(data)
+
+            S = eval(Meta.parse(stats.solver))(C)
+            S,Ir,e = validate_roots(S,C,U,dU,stats.nroots,stats.iterref)
+        end
+
         stats.tm = [stats.tm; toc]
-        if isempty(S); continue; end
+        stats = update_stats(stats,Ir,e)
 
-        stats = update_stats(stats,S,C,U,d)
     end
 
     disp_stats(stats)

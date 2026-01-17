@@ -18,7 +18,7 @@ function S = red_66x92_r6p(C)
     T1([55,568]) = 1;
 
     [V,~] = eig(T0,T1);
-    S = V(20:25,:)./repmat(V(26,:),6,1);
+    S = V(20:25,:)./V(26,:);
     S = S(:,all(isfinite(S)));
 
 end

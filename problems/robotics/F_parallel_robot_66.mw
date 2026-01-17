@@ -174,12 +174,18 @@ nops(Gr);</Text-field>
 </Output>
 </Group></Presentation-Block><Presentation-Block>
 <Group hide-input="false" hide-output="false" labelreference="L4641" drawlabel="true" applyint="true" applyrational="true">
-<Input><Text-field prompt="&gt; " style="Maple Input" layout="Normal">inftyRoots(F, tord, pp);</Text-field>
+<Input><Text-field prompt="&gt; " style="Maple Input" layout="Normal">rootsAtInfinity(F, vars);</Text-field>
 </Input>
-<Output><Text-field style="2D Output" layout="Maple Output"><Equation executable="false" style="2D Output" display="LUkobWZlbmNlZEc2Iy9JK21vZHVsZW5hbWVHNiJJLFR5cGVzZXR0aW5nR0koX3N5c2xpYkdGJzYmLUklbXJvd0dGJDYwLUYsNiYtSSNtaUdGJDYlUSJhRicvJSdpdGFsaWNHUSV0cnVlRicvJSxtYXRodmFyaWFudEdRJ2l0YWxpY0YnLUkjbW9HRiQ2LVEpJmVxdWFscztGJy9GOFEnbm9ybWFsRicvJSZmZW5jZUdRJmZhbHNlRicvJSpzZXBhcmF0b3JHRkIvJSlzdHJldGNoeUdGQi8lKnN5bW1ldHJpY0dGQi8lKGxhcmdlb3BHRkIvJS5tb3ZhYmxlbGltaXRzR0ZCLyUnYWNjZW50R0ZCLyUnbHNwYWNlR1EsMC4yNzc3Nzc4ZW1GJy8lJ3JzcGFjZUdGUS1JI21uR0YkNiRRIjBGJ0Y+Rj4tRjs2LVEiLEYnRj5GQC9GREY2RkVGR0ZJRktGTS9GUFEmMC4wZW1GJy9GU1EsMC4zMzMzMzMzZW1GJy1GLDYmLUYxNiVRImJGJ0Y0RjdGOkZURj5GWC1GLDYmLUYxNiVRImNGJ0Y0RjdGOkZURj5GWC1GLDYmLUYxNiVRInVGJ0Y0RjdGOkZURj5GWC1GLDYmLUYxNiVRInZGJ0Y0RjdGOkZURj5GWC1GLDYmLUYxNiVRIndGJ0Y0RjdGOkZURj4vJStmb3JlZ3JvdW5kR1EoWzAsMCwwXUYnLyUpcmVhZG9ubHlHRkJGPkY+LyUlb3BlbkdRJyZsY3ViO0YnLyUmY2xvc2VHUScmcmN1YjtGJw==">PCgvSSJhRzYiIiIhL0kiYkdGJUYmL0kiY0dGJUYmL0kidUdGJUYmL0kidkdGJUYmL0kid0dGJUYm</Equation></Text-field>
+<Output><Text-field style="2D Output" layout="Maple Output"><Equation executable="false" style="2D Output" display="LUkobWZlbmNlZEc2Iy9JK21vZHVsZW5hbWVHNiJJLFR5cGVzZXR0aW5nR0koX3N5c2xpYkdGJzYmLUYjNiYtSSVtcm93R0YkNjAtSSNtaUdGJDYlUSJhRicvJSdpdGFsaWNHUSV0cnVlRicvJSxtYXRodmFyaWFudEdRJ2l0YWxpY0YnLUkjbW9HRiQ2LVEiLEYnL0Y4USdub3JtYWxGJy8lJmZlbmNlR1EmZmFsc2VGJy8lKnNlcGFyYXRvckdGNi8lKXN0cmV0Y2h5R0ZCLyUqc3ltbWV0cmljR0ZCLyUobGFyZ2VvcEdGQi8lLm1vdmFibGVsaW1pdHNHRkIvJSdhY2NlbnRHRkIvJSdsc3BhY2VHUSYwLjBlbUYnLyUncnNwYWNlR1EsMC4zMzMzMzMzZW1GJy1GMTYlUSJiRidGNEY3RjotRjE2JVEiY0YnRjRGN0Y6LUYuNiYtRjE2JVEnUm9vdE9mRidGNEY3LUY7Ni1RMCZBcHBseUZ1bmN0aW9uO0YnRj5GQC9GREZCRkVGR0ZJRktGTUZPL0ZTRlEtRiM2JC1GLjYoLUklbXN1cEdGJDYlLUYxNiVRI19aRidGNEY3LUkjbW5HRiQ2JFEiMkYnRj4vJTFzdXBlcnNjcmlwdHNoaWZ0R1EiMEYnLUY7Ni1RJyZwbHVzO0YnRj5GQEZdb0ZFRkdGSUZLRk0vRlBRLDAuMjIyMjIyMmVtRicvRlNGZHAtRmRvNiUtRjE2JVEidkYnRjRGN0Zpb0ZdcEZgcC1GZG82JS1GMTYlUSJ3RidGNEY3RmlvRl1wRj5GPkY+RjpGaHBGOkZdcS8lK2ZvcmVncm91bmRHUShbMCwwLDBdRicvJSlyZWFkb25seUdGQkY+Rj4vJSVvcGVuR1EnJmxzcWI7RicvJSZjbG9zZUdRJyZyc3FiO0YnRj5GZXFGaHE=">NyM3KEkiYUc2IkkiYkc2IkkiY0c2Ii1JJ1Jvb3RPZkc2JCUqcHJvdGVjdGVkR0koX3N5c2xpYkc2IjYjLCgqJClJI19aRzYkJSpwcm90ZWN0ZWRHSShfc3lzbGliRzYiIiIjIiIiIiIiKiQpSSJ2RzYiIiIjIiIiIiIiKiQpSSJ3RzYiIiIjIiIiIiIiSSJ2RzYiSSJ3RzYi</Equation></Text-field>
 </Output>
 </Group>
 <Group hide-input="false" hide-output="false" labelreference="L4644" drawlabel="true" applyint="true" applyrational="true" applyexponent="false">
+<Input><Text-field prompt="&gt; " style="Maple Input" layout="Normal">sols := gbsolver(F, vars):
+Digits := 30:
+#map(sol-&gt;subs(vars=~sol, F), sols);</Text-field>
+</Input>
+</Group>
+<Group view="code" labelreference="L4692" drawlabel="true" applyint="true" applyrational="true" applyexponent="false">
 <Input><Text-field prompt="&gt; " style="Maple Input" layout="Normal"></Text-field>
 </Input>
 </Group>

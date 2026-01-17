@@ -6,20 +6,25 @@ include("red_12x36_4pra.jl")
 function test_num_4pra()
 
     Random.seed!(23)
-    N = 10000
-    d = 20
-
     stats = ini_stats("4pra")
+    stats.solver = "red_12x36_4pra"
+    stats.nroots = 20
+    stats.ntrials = 10^4
+    stats.iterref = 0
 
-    for i in 1:N
-        data = inidata_num_4pra()
-        C,U = coefs_4pra(data)
+    for i in 1:stats.ntrials
 
-        toc = @elapsed S = red_12x36_4pra(C,data[3][1]^2-1)
+        toc = @elapsed begin
+            data = inidata_num_4pra()
+            C,U,dU = coefs_4pra(data)
+
+            S = eval(Meta.parse(stats.solver))(C,data[3][1]^2-1)
+            S,Ir,e = validate_roots(S,C,U,dU,stats.nroots,stats.iterref)
+        end
+
         stats.tm = [stats.tm; toc]
-        if isempty(S); continue; end
+        stats = update_stats(stats,Ir,e)
 
-        stats = update_stats(stats,S,C,U,d)
     end
 
     disp_stats(stats)

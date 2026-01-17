@@ -1,17 +1,17 @@
 Maple implementation of the automatic template generator for polynomial systems by greedy parameter search
 
 
-If you use this code, please cite the following work:
+If you use this code, please cite the following paper:
 
 @inproceedings{martyushev2022optimizing,
   title={Optimizing Elimination Templates by Greedy Parameter Search},
   author={Martyushev, Evgeniy and Vrablikova, Jana and Pajdla, Tomas},
   booktitle={Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition},
   pages={15754--15764},
-  year={2022}
+  year={2022},
+  url={https://doi.org/10.1109/CVPR52688.2022.01530},
+  doi={10.1109/CVPR52688.2022.01530}
 }
-Published version:
-https://openaccess.thecvf.com/content/CVPR2022/papers/Martyushev_Optimizing_Elimination_Templates_by_Greedy_Parameter_Search_CVPR_2022_paper.pdf
 
 
 E-mail: martiushevev@susu.ru

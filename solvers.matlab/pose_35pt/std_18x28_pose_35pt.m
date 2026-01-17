@@ -1,4 +1,5 @@
 % Input: coefficient matrix C of size 4x25
+% Output: solution matrix S of size 2x10
 
 function S = std_18x28_pose_35pt(C)
 
@@ -18,9 +19,6 @@ function S = std_18x28_pose_35pt(C)
 
     [V,~] = eig(T);
     S = V(8:9,:)./repmat(V(10,:),2,1);
-
-    I = ~isnan(S(1,:)) & ~isinf(S(1,:));
-    %I = I & ~imag(S(1,:)); % uncomment this line for real roots only
-    S = S(:,I);
+    S = S(:,all(isfinite(S)));
 
 end

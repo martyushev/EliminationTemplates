@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Worksheet>
-<Version major="2021" minor="0"/>
+<Version major="2023" minor="1"/>
 <Label-Scheme value="2" prefix=""/>
 <View-Properties presentation="true" autoexpanding_sections="true" UserProfileName="Maple Default Profile" NumericFormat-ApplyInteger="true" NumericFormat-ApplyRational="true" NumericFormat-ApplyExponent="false" editable="true">
 </View-Properties>
-<MapleNet-Properties prettyprint="3" warnlevel="3" compactdisplay="false" preplot="" helpbrowser="standard" displayprecision="-1" echo="1" scientificx="true" unitattributes="&quot;fontweight&quot; = &quot;bold&quot;" imaginaryunit="I" longdelim="true" elisiontermsthreshold="10000" elisiondigitsafter="100" elisiondigitsbefore="100" plotdevice="inline" errorbreak="1" plotoptions="" plotdriver="opengl" quiet="false" elisiontermsbefore="100" elisiontermsafter="100" historytimestamp="false" screenwidth="79" indentamount="4" plotoutput="terminal" screenpixelheight="768" rtablesize="[10, 10]" useclientjvm="true" format="worksheet" labelwidth="20" postplot="" typesetting="extended" ansi="false" ansicolor="[]" elisiondigitsthreshold="10000" showassumed="1" ansilprint="false" trailingsemicolon="true" errorcursor="false" labelling="true" screenheight="25" prompt="&gt; " verboseproc="1" latexwidth="8.0" ShowLabels="false"/>
+<MapleNet-Properties prettyprint="3" warnlevel="3" compactdisplay="false" preplot="" helpbrowser="standard" displayprecision="-1" echo="1" scientificx="true" unitattributes="&quot;fontweight&quot; = &quot;bold&quot;" imaginaryunit="I" longdelim="true" elisiontermsthreshold="10000" elisiondigitsafter="100" elisiondigitsbefore="100" plotdevice="inline" errorbreak="1" plotoptions="" plotdriver="opengl" quiet="false" elisiontermsbefore="100" elisiontermsafter="100" historytimestamp="false" screenwidth="79" indentamount="4" plotoutput="terminal" screenpixelheight="768" rtablesize="[10, 10]" useclientjvm="true" format="document" labelwidth="20" postplot="" typesetting="extended" ansi="false" ansicolor="[]" elisiondigitsthreshold="10000" showassumed="1" ansilprint="false" trailingsemicolon="true" errorcursor="false" labelling="true" screenheight="25" prompt="&gt; " verboseproc="1" latexwidth="8.0" ShowLabels="false"/>
 <Styles>
 <Font name="Heading 1" background="[255,255,255]" bold="true" executable="false" family="Times New Roman" foreground="[0,0,0]" italic="false" opaque="false" readonly="false" size="18" subscript="false" superscript="false" underline="false" placeholder="false"/>
 <Font name="Warning" background="[255,255,255]" bold="false" executable="false" family="Courier New" foreground="[0,0,255]" italic="false" opaque="false" readonly="true" size="12" subscript="false" superscript="false" underline="false" placeholder="false"/>
@@ -85,7 +85,7 @@
 </Styles>
 <Startup-Code startupcode=""/>
 <Task-table>
-    <Task-category name="&lt;default&gt;"/>
+	<Task-category name="&lt;default&gt;"/>
 </Task-table>
 <Task/><Presentation-Block>
 <Group hide-output="false" labelreference="L4443" drawlabel="true">
@@ -102,13 +102,24 @@
 </Group></Presentation-Block>
 <Section collapsed="true" isCollapsible="true" drawButton="true" MultipleChoiceAnswerIndex="-1" MultipleChoiceRandomizeChoices="false" TrueFalseAnswerIndex="-1" EssayAnswerRows="5" EssayAnswerColumns="60"><Title><Text-field style="Heading 1" layout="Heading 1">Basis finder</Text-field></Title>
 <Group hide-output="false" labelreference="L5129" drawlabel="true" applyint="true" applyrational="true" applyexponent="false">
-<Input><Text-field prompt="&gt; " style="Maple Input" layout="Normal">### read minimal problem, output list of polynomials and list of variables
-readProblem := proc(prob::string)
-    local fn := cat(&quot;../problems/F_&quot;, prob, &quot;.m&quot;), F:
-    if not FileTools[Exists](fn) then error(&quot;file %1 not found&quot;, fn): end if:
-    read fn:
-    F := map(expand, eval(cat(F_, prob))):
-    F, [op(indets(F))]:
+<Input><Text-field prompt="&gt; " style="Maple Input" layout="Normal">### read minimal problem
+readProblem := proc(prob)
+    local dir, subdir, fn, fn1, x, F, proc_name:
+    dir := &quot;../problems/&quot;:
+    subdir := select(x-&gt;FileTools[IsDirectory](cat(dir, x)), FileTools[ListDirectory](dir)):
+    fn, fn1 := cat(&quot;F_&quot;, prob, &quot;.m&quot;), &quot;&quot;:
+    if FileTools[Exists](cat(dir, fn)) then
+        fn1 := cat(dir, fn):
+    else
+        for x in subdir do
+            if FileTools[Exists](cat(dir, x, &quot;/&quot;, fn)) then fn1 := cat(dir, x, &quot;/&quot;, fn): break: end if:
+        end do:
+    end if:
+    if fn1=&quot;&quot; then error(&quot;file %1 not found&quot;, fn): end if:
+    read fn1:
+    F := convert(expand~(eval(cat(F_, prob))), list):
+    proc_name := eval(cat(C_, prob)):
+    return F, [op(indets(F))], proc_name:
 end proc:</Text-field>
 </Input>
 </Group><Presentation-Block>
@@ -206,7 +217,7 @@ end proc:</Text-field>
 ### V. Larsson et al., Beyond Grobner bases: Basis selection for minimal solvers, CVPR 2018
 basisFinder := proc(prob::string, {number_of_bases::posint:=100, deg_over_min::nonnegint:=0, prime_number::posint:=32749, mode := APPEND})
     local pp := prevprime(prime_number+1), F, vars, tord, G, deg, E, M := [], BB, B, fn := cat(&quot;bases/b_&quot;, prob), fd:
-    F, vars := readProblem(prob):
+    F, vars := readProblem(prob)[[1,2]]:
     tord := tdeg(op(vars)):
     G := Groebner[Basis](F, tord, characteristic=pp):
     deg := nops(Groebner[NormalSet](G, tord)[1]):
@@ -231,7 +242,7 @@ end proc:</Text-field>
 <Input><Text-field prompt="&gt; " style="Maple Input" layout="Normal">### write data for Grobner fan computation in Gfan
 writeGfan := proc(prob::string, {prime_number::posint:=32749})
     local pp := prevprime(prime_number+1), F, vars, fd := fopen(&quot;gfan/igf&quot;, WRITE):
-    F, vars := readProblem(prob):
+    F, vars := readProblem(prob)[[1,2]]:
     F := map(expand, convert(F, set)) mod pp:
     <Font encoding="UTF-8">fprintf(fd, &quot;Z/%aZ%a\134n%a&quot;, pp, vars, F):
 </Font>    fclose(fd):
@@ -304,7 +315,7 @@ writeWeights := proc(prob::string, {number_of_weights::posint:=100, rand_range::
     else
         <Font encoding="UTF-8">printf(&quot;Gfan file not found\134n&quot;):
         printf(&quot;Generating %a random weight vectors\134n&quot;, </Font>number_of_weights):
-        F, vars := readProblem(prob):
+        F, vars := readProblem(prob)[[1,2]]:
         rnd := rand(rand_range[1]..rand_range[2]):
         randomize(): # reset the seed for rnd()
         WW := `if`(mode=APPEND, readWeights(fn), []):
@@ -330,7 +341,7 @@ writeCM := proc(prob::string, {prime_number::posint:=32749})
     local Ws0, pp := prevprime(prime_number+1), fn := cat(&quot;weights/w_&quot;, prob), fd, F, sF, vars, Ws:
     Ws0 := readWeights(fn):
     Ws := StringTools[SubstituteAll](StringTools[SubstituteAll](convert(Ws0, string), &quot;[&quot;, &quot;(&quot;), &quot;]&quot;, &quot;)&quot;):
-    F, vars := readProblem(prob):
+    F, vars := readProblem(prob)[[1,2]]:
     vars := convert(vars, string):
     sF := convert(map(expand, F) mod pp, string):
     fd := fopen(&quot;cm/icm&quot;, WRITE):
@@ -775,7 +786,7 @@ end proc:</Text-field>
 <Input><Text-field prompt="&gt; " style="Maple Input" layout="Normal">### initialize minimal problem
 iniProb := proc(prob::string, std::boolean, ff::numeric, pn::posint)
     local F, vF, pp := pn, vars, GBs, Ts, GC, QBs, CMs, tord, CM, G, q, nQBs, i:
-    F, vars := readProblem(prob):
+    F, vars := readProblem(prob)[[1,2]]:
     vF, vars := Vector(F), {op(vars)}:
     tord := tdeg(op(vars)):
     <Font encoding="UTF-8">printf(&quot;The problem is defined by %d polynomials\134n&quot;, </Font>nops(F)):
@@ -927,10 +938,8 @@ end proc:</Text-field>
 <Input><Text-field prompt="&gt; " style="Maple Input" layout="Normal">### write common code of the solver generators
 commonCode2 := proc(fd::integer, fb::string, deg, nv0)
     <Font encoding="UTF-8">fprintf(fd, cat(&quot;\134n&quot;, fb, &quot;[V,~] = eig(T);\134n&quot;)):
-</Font>    fprintf(fd, cat(fb, &quot;S = V(&quot;, deg-nv0, &quot;:&quot;, deg-1, &quot;,:)./repmat(V(&quot;, deg, &quot;,:),<Font encoding="UTF-8">&quot;, nv0, &quot;,1);\134n\134n&quot;)):</Font>
-    fprintf(fd, cat(fb, &quot;<Font encoding="UTF-8">I = ~isnan(S(1,:)) &amp; ~isinf(S(1,:));\134n</Font>&quot;)):
-    <Font encoding="UTF-8">fprintf(fd, cat(fb, &quot;%%I = I &amp; ~imag(S(1,:)); %% uncomment this line for real roots only\134n</Font>&quot;)):
-    fprintf(fd, cat(fb, &quot;S = S(:,I)<Font encoding="UTF-8">;\134n\134n&quot;)):</Font>
+</Font>    fprintf(fd, cat(fb, &quot;S = V(&quot;, deg-nv0, &quot;:&quot;, deg-1, &quot;,:)./repmat(V(&quot;, deg, &quot;,:),<Font encoding="UTF-8">&quot;, nv0, &quot;,1);\134n&quot;)):</Font>
+    fprintf(fd, cat(fb, &quot;S = S(:,all(isfinite(S)))<Font encoding="UTF-8">;\134n\134n&quot;)):</Font>
     fprintf(fd, &quot;end&quot;):
 end proc:</Text-field>
 </Input>
@@ -1011,12 +1020,15 @@ end proc:</Text-field>
 <Group view="code" hide-output="false" labelreference="L5109" drawlabel="true" applyint="true" applyrational="true" applyexponent="false">
 <Input><Text-field prompt="&gt; " style="Maple Input" layout="Normal">### write Matlab files for constructing initial data and coefficient matrix
 writeInidataCoefs := proc(prob::string, dir::string)
-    local proc_name, _C, _name, _size, As, Cs, Cl, fd, i, e, idx, fb := &quot;    &quot;:
+    local proc_name, _C, _V, _name, _size, As, Cs, Cl, fd, i, e, idx, fb := &quot;    &quot;:
+    proc_name := readProblem(prob)[3]:
+    if not type(proc_name, procedure) then
+        WARNING(&quot;Inidata file and coefficient file cannot be created for this problem&quot;):
+        return:
+    end if:
     read &quot;../problems/_common.m&quot;:
-    read cat(&quot;../problems/F_&quot;, prob, &quot;.m&quot;):
-    proc_name := eval(cat(C_, prob)):
-    if not <Font encoding="UTF-8">type(proc_name, procedure) then printf(&quot;Coefficient file cannot be created for this problem\134n&quot;)</Font>: return 0: end if:
-    _C, _name, _size := proc_name():
+    _C, _V, _name, _size := proc_name():
+    read &quot;greedyAG.m&quot;:
     if not FileTools[Exists](dir) then FileTools[MakeDirectory](dir): end if:
     ### write inidata file
     fd := fopen(cat(dir, &quot;/inidata_num_&quot;, prob, &quot;.m&quot;), WRITE):
@@ -1249,7 +1261,7 @@ solverGenerator,
 </Input>
 </Group></Presentation-Block><Presentation-Block>
 <Group view="presentation" inline-output="false" labelreference="L2" drawlabel="true" applyint="true" applyrational="true" applyexponent="false">
-<Input><Text-field style="Text" layout="Normal"><Equation executable="true" style="2D Math" input-equation="" display="LUklbXJvd0c2Iy9JK21vZHVsZW5hbWVHNiJJLFR5cGVzZXR0aW5nR0koX3N5c2xpYkdGJzYlLUkjbWlHRiQ2I1EhRicvJStleGVjdXRhYmxlR1EmZmFsc2VGJy8lLG1hdGh2YXJpYW50R1Enbm9ybWFsRic=">LUklbXJvd0c2Iy9JK21vZHVsZW5hbWVHNiJJLFR5cGVzZXR0aW5nR0koX3N5c2xpYkdGJzYjLUkjbWlHRiQ2I1EhRic=</Equation></Text-field>
+<Input><Text-field style="Text" layout="Normal"><Equation executable="true" style="2D Math" input-equation="" display="LUklbXJvd0c2Iy9JK21vZHVsZW5hbWVHNiJJLFR5cGVzZXR0aW5nR0koX3N5c2xpYkdGJzYlLUkjbW9HRiQ2LVEhRicvJSxtYXRodmFyaWFudEdRJ25vcm1hbEYnLyUmZmVuY2VHUSZmYWxzZUYnLyUqc2VwYXJhdG9yR1EldHJ1ZUYnLyUpc3RyZXRjaHlHRjQvJSpzeW1tZXRyaWNHRjQvJShsYXJnZW9wR0Y0LyUubW92YWJsZWxpbWl0c0dGNC8lJ2FjY2VudEdGNC8lJ2xzcGFjZUdRJjAuMGVtRicvJSdyc3BhY2VHUSwwLjMzMzMzMzNlbUYnLyUrZXhlY3V0YWJsZUdGNEYv">LUklbXJvd0c2Iy9JK21vZHVsZW5hbWVHNiJJLFR5cGVzZXR0aW5nR0koX3N5c2xpYkdGJzYjLUkjbW9HRiQ2LVEhRicvJSxtYXRodmFyaWFudEdRJ25vcm1hbEYnLyUmZmVuY2VHUSZmYWxzZUYnLyUqc2VwYXJhdG9yR1EldHJ1ZUYnLyUpc3RyZXRjaHlHRjQvJSpzeW1tZXRyaWNHRjQvJShsYXJnZW9wR0Y0LyUubW92YWJsZWxpbWl0c0dGNC8lJ2FjY2VudEdGNC8lJ2xzcGFjZUdRJjAuMGVtRicvJSdyc3BhY2VHUSwwLjMzMzMzMzNlbUYn</Equation></Text-field>
 </Input>
 </Group></Presentation-Block>
 </Worksheet>

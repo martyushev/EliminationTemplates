@@ -1,20 +1,21 @@
 rng(23);
-N = 10000;
-d = 12;
-
 stats = ini_stats('p4p_fr_iccv17');
+stats.solver = 'red_28x40_p4p_fr_iccv17';
+stats.nroots = 12;
+stats.ntrials = 10^4;
+stats.iterref = 0;
 
-for i = 1:N
+for i = 1:stats.ntrials
 
+    tic;
     data = inidata_num_p4p_fr_iccv17();
     [C,U,dU] = coefs_p4p_fr_iccv17(data);
 
-    tic;
-    S = red_28x40_p4p_fr_iccv17(C);
-    stats.tm = [stats.tm toc];
-    if isempty(S); continue; end
+    S = feval(stats.solver,C);
+    [S,Ir,e] = validate_roots(S,C,U,dU,stats.nroots,stats.iterref);
 
-    [stats,~] = update_stats(stats,S,C,U,dU,d,'iterRef',0);
+    stats.tm = [stats.tm toc];
+    stats = update_stats(stats,Ir,e);
 
 end
 

@@ -1,9 +1,13 @@
-function coefs_pose_quiver(data::Vector{Matrix{Float64}})
+function coefs_pose_quiver(data)
 
     M = data[1]
 
     C = zeros(4,18)
 
+    C[[29,33]] .= M[33]
+    C[[30,34]] .= M[34]
+    C[[31,35]] .= M[35]
+    C[[32,36]] .= M[36]
     C[25] = -2*M[9]
     C[5] = 2*M[9]
     C[26] = -2*M[10]
@@ -56,10 +60,6 @@ function coefs_pose_quiver(data::Vector{Matrix{Float64}})
     C[43] = 2*M[7]+2*M[15]
     C[68] = 2*M[8]-2*M[16]
     C[44] = 2*M[8]+2*M[16]
-    C[[29,33]] .= M[33]
-    C[[30,34]] .= M[34]
-    C[[31,35]] .= M[35]
-    C[[32,36]] .= M[36]
 
     A = C[:,1:4]\C[:,5:end]
 
@@ -100,10 +100,11 @@ function coefs_pose_quiver(data::Vector{Matrix{Float64}})
     C[71] = A[55]
     C[72] = A[56]
 
-    C = C./repeat(sqrt.(sum(C.*conj(C),dims=2)),1,size(C,2))
+    C = C./norm.(eachrow(C))
 
-    U(w,x,y,z) = [w*x^2,w*y^2,w*x*z,w*y*z,w*z^2,w*x,x^2,w*y,x*y,y^2,x*z,y*z,z^2,w,x,y,z,1]
+    U(s) = [s[1]*s[2]^2,s[1]*s[3]^2,s[1]*s[2]*s[4],s[1]*s[3]*s[4],s[1]*s[4]^2,s[2]*s[1],s[2]^2,s[1]*s[3],s[2]*s[3],s[3]^2,s[2]*s[4],s[3]*s[4],s[4]^2,s[1],s[2],s[3],s[4],1];
+    dU(s) = [[s[2]^2,s[3]^2,s[2]*s[4],s[3]*s[4],s[4]^2,s[2],0,s[3],0,0,0,0,0,1,0,0,0,0] [2*s[2]*s[1],0,s[1]*s[4],0,0,s[1],2*s[2],0,s[3],0,s[4],0,0,0,1,0,0,0] [0,2*s[1]*s[3],0,s[1]*s[4],0,0,0,s[1],s[2],2*s[3],0,s[4],0,0,0,1,0,0] [0,0,s[2]*s[1],s[1]*s[3],2*s[1]*s[4],0,0,0,0,0,s[2],s[3],2*s[4],0,0,0,1,0]];
 
-    return C,U
+    return C,U,dU
 
 end

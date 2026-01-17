@@ -18,7 +18,7 @@ function S = red_11x20_focal6p_1s(C)
     T1([1,11,31,61]) = 1;
 
     [V,~] = eig(T0,T1);
-    S = V(6:8,:)./repmat(V(9,:),3,1);
+    S = V(6:8,:)./V(9,:);
     S = S(:,all(isfinite(S)));
 
 end

@@ -1,4 +1,5 @@
 % Input: coefficient matrix C of size 10x21
+% Output: solution matrix S of size 5x8
 
 function S = std_47x55_colpiv_rollingshutter(C)
 
@@ -29,9 +30,6 @@ function S = std_47x55_colpiv_rollingshutter(C)
 
     [V,~] = eig(T);
     S = V(3:7,:)./repmat(V(8,:),5,1);
-
-    I = ~isnan(S(1,:)) & ~isinf(S(1,:));
-    %I = I & ~imag(S(1,:)); % uncomment this line for real roots only
-    S = S(:,I);
+    S = S(:,all(isfinite(S)));
 
 end

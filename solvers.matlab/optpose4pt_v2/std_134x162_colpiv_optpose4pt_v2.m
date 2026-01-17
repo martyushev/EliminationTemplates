@@ -1,4 +1,5 @@
 % Input: coefficient matrix C of size 5x19
+% Output: solution matrix S of size 5x28
 
 function S = std_134x162_colpiv_optpose4pt_v2(C)
 
@@ -32,9 +33,6 @@ function S = std_134x162_colpiv_optpose4pt_v2(C)
 
     [V,~] = eig(T);
     S = V(23:27,:)./repmat(V(28,:),5,1);
-
-    I = ~isnan(S(1,:)) & ~isinf(S(1,:));
-    %I = I & ~imag(S(1,:)); % uncomment this line for real roots only
-    S = S(:,I);
+    S = S(:,all(isfinite(S)));
 
 end

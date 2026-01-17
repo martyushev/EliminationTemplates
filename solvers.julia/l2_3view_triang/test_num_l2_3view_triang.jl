@@ -6,20 +6,25 @@ include("red_190x227_l2_3view_triang.jl")
 function test_num_l2_3view_triang()
 
     Random.seed!(23)
-    N = 10000
-    d = 31
-
     stats = ini_stats("l2_3view_triang")
+    stats.solver = "red_190x227_l2_3view_triang"
+    stats.nroots = 31
+    stats.ntrials = 10^4
+    stats.iterref = 0
 
-    for i in 1:N
-        data = inidata_num_l2_3view_triang()
-        C,U = coefs_l2_3view_triang(data)
+    for i in 1:stats.ntrials
 
-        toc = @elapsed S = red_190x227_l2_3view_triang(C)
+        toc = @elapsed begin
+            data = inidata_num_l2_3view_triang()
+            C,U,dU = coefs_l2_3view_triang(data)
+
+            S = eval(Meta.parse(stats.solver))(C)
+            S,Ir,e = validate_roots(S,C,U,dU,stats.nroots,stats.iterref)
+        end
+
         stats.tm = [stats.tm; toc]
-        if isempty(S); continue; end
+        stats = update_stats(stats,Ir,e)
 
-        stats = update_stats(stats,S,C,U,d)
     end
 
     disp_stats(stats)

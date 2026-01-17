@@ -1,4 +1,5 @@
 % Input: coefficient matrix C of size 3x20
+% Output: solution matrix S of size 3x27
 
 function S = std_87x114_colpiv_opt_pnp_hesch(C)
 
@@ -29,9 +30,6 @@ function S = std_87x114_colpiv_opt_pnp_hesch(C)
 
     [V,~] = eig(T);
     S = V(24:26,:)./repmat(V(27,:),3,1);
-
-    I = ~isnan(S(1,:)) & ~isinf(S(1,:));
-    %I = I & ~imag(S(1,:)); % uncomment this line for real roots only
-    S = S(:,I);
+    S = S(:,all(isfinite(S)));
 
 end

@@ -1,4 +1,4 @@
-% Input: coefficient matrix C of size 6x46 and scalar L1
+% Input: coefficient matrix C of size 6x46
 % Output: solution matrix S of size 6x69
 
 function S = red_293x362_parallel_robot_66(C,L1)
@@ -10,6 +10,8 @@ function S = red_293x362_parallel_robot_66(C,L1)
 
     [L,~,p] = lu(M(:,1:255),'vector');
     M = M(p(end-37:end),256:end)-L(end-37:end,:)*(L(1:255,:)\M(p(1:255),256:end));
+    %[M,~] = qr(M(:,1:255),M(:,256:end));
+    %M = M(end-37:end,:);
 
     T0 = zeros(69);
     T0([4,5,9,17,18,22,23,25,26,28,29,30,34,35,37,38,40,41,43,44,45,49,50,52,53,55,56,57,58,60,61,62,63,64,66,67,68,69],:) = -M(:,39:end);
@@ -19,7 +21,7 @@ function S = red_293x362_parallel_robot_66(C,L1)
     T1([1,71,141,351,421,491,631,701,771,841,911,981,1051,1261,1331,1401,1611,1821,2101,2171,2241,2451,2661,2871,3151,3221,3291,3501,3711,4061,4481]) = 1;
 
     [V,~] = eig(T0,T1);
-    S = V(63:68,:)./repmat(V(69,:),6,1);
+    S = V(63:68,:)./V(69,:);
     S = S(:,all(isfinite(S)));
 
 end

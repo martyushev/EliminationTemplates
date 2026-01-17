@@ -18,7 +18,7 @@ function S = red_7x15_8ptF_radial_1s(C)
     T1([1,19,37,55]) = 1;
 
     [V,~] = eig(T0,T1);
-    S = V(6:7,:)./repmat(V(8,:),2,1);
+    S = V(6:7,:)./V(8,:);
     S = S(:,all(isfinite(S)));
 
 end

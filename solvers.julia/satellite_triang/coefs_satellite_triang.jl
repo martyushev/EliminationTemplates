@@ -1,10 +1,11 @@
-function coefs_satellite_triang(data::Vector{Matrix{Float64}})
+function coefs_satellite_triang(data)
 
     c1 = data[1]
     c2 = data[2]
     c3 = data[3]
 
     C = zeros(3,20)
+
     C[58] = c1[1]
     C[55] = c1[2]
     C[46] = c1[3]
@@ -66,10 +67,11 @@ function coefs_satellite_triang(data::Vector{Matrix{Float64}})
     C[6] = c3[19]
     C[3] = c3[20]
 
-    C = C./repeat(sqrt.(sum(C.*conj(C),dims=2)),1,size(C,2))
+    C = C./norm.(eachrow(C))
 
-    U(x,y,z) = [x^3,y*x^2,y^2*x,y^3,x^2*z,x*y*z,y^2*z,x*z^2,y*z^2,z^3,x^2,x*y,y^2,x*z,y*z,z^2,x,y,z,1]
+    U(s) = [s[1]^3,s[2]*s[1]^2,s[1]*s[2]^2,s[2]^3,s[3]*s[1]^2,s[1]*s[2]*s[3],s[2]^2*s[3],s[1]*s[3]^2,s[2]*s[3]^2,s[3]^3,s[1]^2,s[2]*s[1],s[2]^2,s[1]*s[3],s[2]*s[3],s[3]^2,s[1],s[2],s[3],1];
+    dU(s) = [[3*s[1]^2,2*s[2]*s[1],s[2]^2,0,2*s[1]*s[3],s[2]*s[3],0,s[3]^2,0,0,2*s[1],s[2],0,s[3],0,0,1,0,0,0] [0,s[1]^2,2*s[2]*s[1],3*s[2]^2,0,s[1]*s[3],2*s[2]*s[3],0,s[3]^2,0,0,s[1],2*s[2],0,s[3],0,0,1,0,0] [0,0,0,0,s[1]^2,s[2]*s[1],s[2]^2,2*s[1]*s[3],2*s[2]*s[3],3*s[3]^2,0,0,0,s[1],s[2],2*s[3],0,0,1,0]];
 
-    return C,U
+    return C,U,dU
 
 end

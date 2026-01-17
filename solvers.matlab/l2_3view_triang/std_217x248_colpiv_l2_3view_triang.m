@@ -30,9 +30,6 @@ function S = std_217x248_colpiv_l2_3view_triang(C)
 
     [V,~] = eig(T);
     S = V(23:30,:)./repmat(V(31,:),8,1);
-
-    I = ~isnan(S(1,:)) & ~isinf(S(1,:));
-    %I = I & ~imag(S(1,:)); % uncomment this line for real roots only
-    S = S(:,I);
+    S = S(:,all(isfinite(S)));
 
 end

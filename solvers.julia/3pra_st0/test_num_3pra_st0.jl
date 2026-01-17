@@ -6,20 +6,25 @@ include("red_12x25_3pra_st0.jl")
 function test_num_3pra_st0()
 
     Random.seed!(23)
-    N = 10000
-    d = 12
-
     stats = ini_stats("3pra_st0")
+    stats.solver = "red_12x25_3pra_st0"
+    stats.nroots = 12
+    stats.ntrials = 10^4
+    stats.iterref = 0
 
-    for i in 1:N
-        data = inidata_num_3pra_st0()
-        C,U = coefs_3pra_st0(data)
+    for i in 1:stats.ntrials
 
-        toc = @elapsed S = red_12x25_3pra_st0(C,data[3][1]^2-1)
+        toc = @elapsed begin
+            data = inidata_num_3pra_st0()
+            C,U,dU = coefs_3pra_st0(data)
+
+            S = eval(Meta.parse(stats.solver))(C,data[3][1]^2-1)
+            S,Ir,e = validate_roots(S,C,U,dU,stats.nroots,stats.iterref)
+        end
+
         stats.tm = [stats.tm; toc]
-        if isempty(S); continue; end
+        stats = update_stats(stats,Ir,e)
 
-        stats = update_stats(stats,S,C,U,d)
     end
 
     disp_stats(stats)

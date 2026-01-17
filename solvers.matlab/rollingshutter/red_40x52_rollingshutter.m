@@ -18,7 +18,7 @@ function S = red_40x52_rollingshutter(C)
     T1([1,14,27,118]) = 1;
 
     [V,~] = eig(T0,T1);
-    S = V(7:11,:)./repmat(V(12,:),5,1);
+    S = V(7:11,:)./V(12,:);
     S = S(:,all(isfinite(S)));
 
 end

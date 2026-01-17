@@ -18,7 +18,7 @@ function S = red_14x22_toy(C)
     T1([1,19,46]) = 1;
 
     [V,~] = eig(T0,T1);
-    S = V(5:7,:)./repmat(V(8,:),3,1);
+    S = V(5:7,:)./V(8,:);
     S = S(:,all(isfinite(S)));
 
 end

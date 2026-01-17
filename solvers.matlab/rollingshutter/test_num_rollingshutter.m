@@ -1,23 +1,21 @@
 rng(23);
-N = 10000;
-nRoots = 8;
-iterRef = 0;
-
 stats = ini_stats('rollingshutter');
 stats.solver = 'red_40x52_rollingshutter';
+stats.nroots = 8;
+stats.ntrials = 10^4;
+stats.iterref = 0;
 
-for i = 1:N
+for i = 1:stats.ntrials
 
     tic;
     data = inidata_num_rollingshutter();
     [C,U,dU] = coefs_rollingshutter(data);
 
     S = feval(stats.solver,C);
-    if isempty(S); continue; end
-    [S,Ir,e] = validate_roots(S,C,U,dU,nRoots,iterRef);
+    [S,Ir,e] = validate_roots(S,C,U,dU,stats.nroots,stats.iterref);
 
     stats.tm = [stats.tm toc];
-    stats = update_stats_o(stats,Ir,e);
+    stats = update_stats(stats,Ir,e);
 
 end
 

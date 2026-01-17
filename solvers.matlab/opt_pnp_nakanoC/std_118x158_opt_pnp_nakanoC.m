@@ -1,4 +1,5 @@
 % Input: coefficient matrix C of size 6x35
+% Output: solution matrix S of size 3x40
 
 function S = std_118x158_opt_pnp_nakanoC(C)
 
@@ -18,9 +19,6 @@ function S = std_118x158_opt_pnp_nakanoC(C)
 
     [V,~] = eig(T);
     S = V(37:39,:)./repmat(V(40,:),3,1);
-    
-    I = ~isnan(S(1,:)) & ~isinf(S(1,:));
-    %I = I & ~imag(S(1,:)); % uncomment this line for real roots only
-    S = S([3,1,2],I);
+    S = S(:,all(isfinite(S)));
 
 end

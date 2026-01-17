@@ -1,9 +1,10 @@
-function coefs_stitching(data::Vector{Matrix{Float64}})
+function coefs_stitching(data)
 
     c1 = data[1]
     c2 = data[2]
 
     C = zeros(2,16)
+
     C[1] = c1[1]
     C[3] = c1[2]
     C[5] = c1[3]
@@ -37,10 +38,11 @@ function coefs_stitching(data::Vector{Matrix{Float64}})
     C[30] = c2[15]
     C[32] = c2[16]
 
-    C = C./repeat(sqrt.(sum(C.*conj(C),dims=2)),1,size(C,2))
+    C = C./norm.(eachrow(C))
 
-    U(x,y) = [x^6*y^3,x^5*y^3,x^4*y^3,x^4*y^2,y^3*x^3,y^2*x^3,y^3*x^2,y^2*x^2,y^3*x,y*x^2,y^2*x,y^3,x*y,y^2,y,1]
+    U(s) = [s[1]^6*s[2]^3,s[1]^5*s[2]^3,s[1]^4*s[2]^3,s[1]^4*s[2]^2,s[1]^3*s[2]^3,s[1]^3*s[2]^2,s[2]^3*s[1]^2,s[1]^2*s[2]^2,s[1]*s[2]^3,s[2]*s[1]^2,s[1]*s[2]^2,s[2]^3,s[2]*s[1],s[2]^2,s[2],1];
+    dU(s) = [[6*s[1]^5*s[2]^3,5*s[1]^4*s[2]^3,4*s[1]^3*s[2]^3,4*s[1]^3*s[2]^2,3*s[2]^3*s[1]^2,3*s[1]^2*s[2]^2,2*s[1]*s[2]^3,2*s[1]*s[2]^2,s[2]^3,2*s[2]*s[1],s[2]^2,0,s[2],0,0,0] [3*s[1]^6*s[2]^2,3*s[1]^5*s[2]^2,3*s[1]^4*s[2]^2,2*s[1]^4*s[2],3*s[1]^3*s[2]^2,2*s[1]^3*s[2],3*s[1]^2*s[2]^2,2*s[2]*s[1]^2,3*s[1]*s[2]^2,s[1]^2,2*s[2]*s[1],3*s[2]^2,s[1],2*s[2],1,0]];
 
-    return C,U
+    return C,U,dU
 
 end

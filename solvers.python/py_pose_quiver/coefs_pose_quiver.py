@@ -1,6 +1,7 @@
 import numpy as np
 
 def coefs_pose_quiver(data):
+
     M = data[0].T.flat
 
     C = np.zeros((4,18))
@@ -99,9 +100,12 @@ def coefs_pose_quiver(data):
     C.flat[70] = A[54]
     C.flat[71] = A[55]
 
-    C = C/np.sqrt(np.sum(C*np.conj(C),axis=1,keepdims=True))
+    C = C/np.linalg.norm(C,axis=1,keepdims=True)
 
-    def U(w,x,y,z):
-        return np.array([w*x**2,w*y**2,w*x*z,w*y*z,w*z**2,w*x,x**2,w*y,x*y,y**2,x*z,y*z,z**2,w,x,y,z,1])
+    def U(s):
+        return np.array([s[0]*s[1]**2,s[0]*s[2]**2,s[0]*s[1]*s[3],s[0]*s[2]*s[3],s[0]*s[3]**2,s[1]*s[0],s[1]**2,s[0]*s[2],s[1]*s[2],s[2]**2,s[1]*s[3],s[2]*s[3],s[3]**2,s[0],s[1],s[2],s[3],1])
 
-    return C,U
+    def dU(s):
+        return np.column_stack([[s[1]**2,s[2]**2,s[1]*s[3],s[2]*s[3],s[3]**2,s[1],0,s[2],0,0,0,0,0,1,0,0,0,0],[2*s[1]*s[0],0,s[0]*s[3],0,0,s[0],2*s[1],0,s[2],0,s[3],0,0,0,1,0,0,0],[0,2*s[0]*s[2],0,s[0]*s[3],0,0,0,s[0],s[1],2*s[2],0,s[3],0,0,0,1,0,0],[0,0,s[1]*s[0],s[0]*s[2],2*s[0]*s[3],0,0,0,0,0,s[1],s[2],2*s[3],0,0,0,1,0]])
+
+    return C,U,dU

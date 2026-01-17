@@ -18,7 +18,7 @@ function S = red_10x20_5p(C)
     T1([1,12,34,67]) = 1;
 
     [V,~] = eig(T0,T1);
-    S = V(7:9,:)./repmat(V(10,:),3,1);
+    S = V(7:9,:)./V(10,:);
     S = S(:,all(isfinite(S)));
 
 end

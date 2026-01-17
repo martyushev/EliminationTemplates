@@ -1,13 +1,17 @@
 Maple implementation of the automatic template generator for Laurent polynomial systems by redundant solving sets
 
 
-If you use this code in your research, please cite the following paper:
+If you use this code, please cite the following paper:
 
-@article{martyushev2023automatic,
-  title={Automatic Solver Generator for Systems of Laurent Polynomial Equations},
+@article{martyushev2026automatic,
+  title={Automatic Solver Generator for Systems of {L}aurent Polynomial Equations},
   author={Martyushev, Evgeniy and Bhayani, Snehal and Pajdla, Tomas},
-  journal={https://arxiv.org/abs/2307.00320},
-  year={2023}
+  journal={International Journal of Computer Vision},
+  volume={134},
+  pages={59},
+  year={2026},
+  url={https://doi.org/10.1007/s11263-025-02635-9},
+  doi={10.1007/s11263-025-02635-9}
 }
 
 
@@ -15,7 +19,7 @@ E-mail: martiushevev@susu.ru
 Project page: https://github.com/martyushev/eliminationTemplates
 
 
-Software required: Maple 2021+
+Software required: Maple 2023+
 
 
 How to use:
@@ -27,28 +31,28 @@ How to use:
  2.1) Configure parameters in redundantAG.ini
  2.2) Run Maple and open templateFinder.mw
  2.3) Pick minimal problem (prob := "problem_name")
- 2.4) Enter templateFinder(prob): Note that
-  - it can be interrupted at any time
-  - found templates are stored in the global variable TD of type Array
-  - found templates are not saved automatically to a file
+ 2.4) Enter templateFinder(prob):
+  * it can be interrupted at any time
+  * found templates are stored in the global variable TD of type Array
+  * found templates are not saved automatically to a file
  2.5) Select the template for reduction (td := TD[i])
- 2.6) Enter templateReduction(prob, td): Note that
-  - it can be interrupted at any time
-  - reduced template is stored in the global variable td1 of type list
-  - reduced template is not saved automatically to a file
- 2.7) Enter saveTemplate(prob, td1): Note that
-  - reduced template is saved to templates/t_prob
-  - existing template file will be overwritten
+ 2.6) Enter templateReduction(prob, td):
+  * it can be interrupted at any time
+  * reduced template is stored in the global variable td1 of type list
+  * reduced template is not saved automatically to a file
+ 2.7) Enter saveTemplate(prob, td1):
+  * reduced template is saved to templates/t_prob
+  * existing template file will be overwritten
 
 3) Generating solver and/or related files from the saved template
  3.1) Configure parameters in redundantAG.ini
  3.2) Run Maple and open solverGenerator.mw
  3.3) Pick minimal problem (prob := "problem_name")
- 3.4) Enter solverGenerator(prob): Note that
-  - solver and related files are generated in ../solvers.language/prob, where language is one of matlab, julia, python
-  - existing files will be overwritten
-  - solver file cannot be created for incomplete templates
-  - for positive-dimensional systems with 0-dimensional components, the number of roots is always set to 1 and should be changed manually in the test file
+ 3.4) Enter solverGenerator(prob):
+  * solver and related files are generated in ../solvers.language/prob, where language is one of matlab, julia, python
+  * existing files will be overwritten
+  * solver file cannot be created for incomplete templates
+  * for positive-dimensional systems with 0-dimensional components, the number of roots is always set to 1 and should be changed manually in the test file
 
 
 Folders:

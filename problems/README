@@ -69,4 +69,5 @@ Minimal problems:
 49) IOD: initial orbit determination problem
 50) hyb13f_depth_laurent: semi-generalized hybrid relative pose estimation (Laurent polynomial depth formulation)
 51) parallel_robot_66: forward kinematics problem for a general Stewart-Gough platform
-52) toa3d_46: time-of-arrival self-localization problem for 6 receivers and 4 senders (another formulation, cf.47)
+52) toa2d_33: 2-dimensional time-of-arrival self-localization problem for 3 receivers and 3 senders
+53) toa3d_46: 3-dimensional time-of-arrival self-localization problem for 6 receivers and 4 senders (another formulation, cf.47)

@@ -18,7 +18,7 @@ function S = red_18x28_toa2d_33(C)
     T1([12,67]) = 1;
 
     [V,~] = eig(T0,T1);
-    S = V(7:9,:)./repmat(V(10,:),3,1);
+    S = V(7:9,:)./V(10,:);
     S = S(:,all(isfinite(S)));
 
 end

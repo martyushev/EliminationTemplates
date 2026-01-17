@@ -1,4 +1,4 @@
-function coefs_toy(data::Vector{Matrix{Float64}})
+function coefs_toy(data)
 
     A = data[1]
 
@@ -9,10 +9,11 @@ function coefs_toy(data::Vector{Matrix{Float64}})
     C[29] = A[2]
     C[30] = A[3]
 
-    C = C./repeat(sqrt.(sum(C.*conj(C),dims=2)),1,size(C,2))
+    C = C./norm.(eachrow(C))
 
-    U(x,y,z) = [x^3,y^3,z^2*x,x^2,y*x,y^2,y*z,z^2,z,1]
+    U(s) = [s[1]^3,s[2]^3,s[3]^2*s[1],s[1]^2,s[2]*s[1],s[2]^2,s[2]*s[3],s[3]^2,s[3],1];
+    dU(s) = [[3*s[1]^2,0,s[3]^2,2*s[1],s[2],0,0,0,0,0] [0,3*s[2]^2,0,0,s[1],2*s[2],s[3],0,0,0] [0,0,2*s[3]*s[1],0,0,0,s[2],2*s[3],1,0]];
 
-    return C,U
+    return C,U,dU
 
 end

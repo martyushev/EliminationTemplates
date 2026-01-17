@@ -1,4 +1,5 @@
 % Input: coefficient matrix C of size 3x29
+% Output: solution matrix S of size 3x16
 
 function S = std_57x73_colpiv_refract5p(C)
 
@@ -25,9 +26,6 @@ function S = std_57x73_colpiv_refract5p(C)
 
     [V,~] = eig(T);
     S = V(13:15,:)./repmat(V(16,:),3,1);
-
-    I = ~isnan(S(1,:)) & ~isinf(S(1,:));
-    %I = I & ~imag(S(1,:)); % uncomment this line for real roots only
-    S = S(:,I);
+    S = S(:,all(isfinite(S)));
 
 end

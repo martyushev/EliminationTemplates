@@ -18,7 +18,7 @@ function S = red_74x104_satellite_triang(C)
     T1([32,125,218,249,311,435,466,528,621,652,714,807]) = 1;
 
     [V,~] = eig(T0,T1);
-    S = V(27:29,:)./repmat(V(30,:),3,1);
+    S = V(27:29,:)./V(30,:);
     S = S(:,all(isfinite(S)));
 
 end

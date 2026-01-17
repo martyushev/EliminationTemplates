@@ -1,20 +1,21 @@
 rng(23);
-N = 10000;
-d = 16;
-
 stats = ini_stats('refract5p');
+stats.solver = 'red_38x58_refract5p';
+stats.nroots = 16;
+stats.ntrials = 10^4;
+stats.iterref = 0;
 
-for i = 1:N
+for i = 1:stats.ntrials
 
+    tic;
     data = inidata_num_refract5p();
     [C,U,dU] = coefs_refract5p(data);
 
-    tic;
-    S = red_38x58_refract5p(C);
-    stats.tm = [stats.tm toc];
-    if isempty(S); continue; end
+    S = feval(stats.solver,C);
+    [S,Ir,e] = validate_roots(S,C,U,dU,stats.nroots,stats.iterref);
 
-    [stats,~] = update_stats(stats,S,C,U,dU,d,'iterRef',0);
+    stats.tm = [stats.tm toc];
+    stats = update_stats(stats,Ir,e);
 
 end
 

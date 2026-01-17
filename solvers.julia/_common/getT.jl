@@ -1,4 +1,4 @@
-# get action matrix
+# get action matrix for column-pivoting solvers
 function getT(M::Matrix{Float64},RP::Vector{Int},B::Vector{Int},xP::Vector{Int})
 
     d = length(B)

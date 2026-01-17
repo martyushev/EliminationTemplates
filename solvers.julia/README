@@ -1,13 +1,17 @@
-Collection of state-of-the-art Julia solvers for minimal problems
+Collection of Julia solvers for minimal problems
 
 
-If you use this code, please cite the following work:
+If you use this code, please cite the following paper:
 
-@article{martyushev2023automatic,
-  title={Automatic Solver Generator for Systems of Laurent Polynomial Equations},
+@article{martyushev2026automatic,
+  title={Automatic Solver Generator for Systems of {L}aurent Polynomial Equations},
   author={Martyushev, Evgeniy and Bhayani, Snehal and Pajdla, Tomas},
-  journal={https://arxiv.org/abs/2307.00320},
-  year={2023}
+  journal={International Journal of Computer Vision},
+  volume={134},
+  pages={59},
+  year={2026},
+  url={https://doi.org/10.1007/s11263-025-02635-9},
+  doi={10.1007/s11263-025-02635-9}
 }
 
 
@@ -15,7 +19,7 @@ E-mail: martiushevev@susu.ru
 Project page: https://github.com/martyushev/eliminationTemplates
 
 
-Tested on Julia 1.11.3
+Tested on Julia 1.12.1
 
 
 How to use:
@@ -29,6 +33,6 @@ Folders:
 1) _common: help functions common to multiple problems
 2) prob: problem folder containing 4 jl-files:
  2.1) inidata_num_prob: generates random initial data
- 2.2) coefs_prob: computes initial Macaulay (coefficient) matrix (C) and monomial vector (U)
+ 2.2) coefs_prob: computes initial Macaulay (coefficient) matrix (C), monomial vector (U) and matrix of partial derivatives (dU)
  2.3) test_num_prob: evaluates speed, numerical accuracy, fail rate, etc.
  2.4) red_mxn(_colpiv)_prob: solver created by redundantAG (m x n - template size, colpiv - if column-pivoting strategy used)

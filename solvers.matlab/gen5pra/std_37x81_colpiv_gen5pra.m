@@ -33,9 +33,6 @@ function S = std_37x81_colpiv_gen5pra(C)
 
     [V,~] = eig(T);
     S = V(41:43,:)./repmat(V(44,:),3,1);
-
-    I = ~isnan(S(1,:)) & ~isinf(S(1,:));
-    %I = I & ~imag(S(1,:)); % uncomment this line for real roots only
-    S = S(:,I);
+    S = S(:,all(isfinite(S)));
 
 end

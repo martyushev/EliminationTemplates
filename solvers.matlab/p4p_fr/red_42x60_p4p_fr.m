@@ -18,7 +18,7 @@ function S = red_42x60_p4p_fr(C)
     T1([1,20,77,134,153,210,286]) = 1;
 
     [V,~] = eig(T0,T1);
-    S = V(14:17,:)./repmat(V(18,:),4,1);
+    S = V(14:17,:)./V(18,:);
     S = S(:,all(isfinite(S)));
 
 end

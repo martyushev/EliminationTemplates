@@ -1,4 +1,5 @@
 % Input: coefficient matrix C of size 2x16
+% Output: solution matrix S of size 2x18
 
 function S = nstd_18x36_colpiv_stitching(C)
 
@@ -29,9 +30,6 @@ function S = nstd_18x36_colpiv_stitching(C)
 
     [V,~] = eig(T);
     S = V(16:17,:)./repmat(V(18,:),2,1);
-
-    I = ~isnan(S(1,:)) & ~isinf(S(1,:));
-    %I = I & ~imag(S(1,:)); % uncomment this line for real roots only
-    S = S(:,I);
+    S = S(:,all(isfinite(S)));
 
 end

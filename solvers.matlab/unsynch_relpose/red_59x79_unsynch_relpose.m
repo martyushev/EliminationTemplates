@@ -18,7 +18,7 @@ function S = red_59x79_unsynch_relpose(C)
     T1([253,274,295,379]) = 1;
 
     [V,~] = eig(T0,T1);
-    S = V(16:19,:)./repmat(V(20,:),4,1);
+    S = V(16:19,:)./V(20,:);
     S = S(:,all(isfinite(S)));
 
 end

@@ -7,6 +7,8 @@ function S = red_73x97_rdist9p(C)
 
     [L,~,p] = lu(M(:,1:54),'vector');
     M = M(p(end-18:end),55:end)-L(end-18:end,:)*(L(1:54,:)\M(p(1:54),55:end));
+    %[M,~] = qr(M(:,1:54),M(:,55:end));
+    %M = M(end-18:end,:);
 
     T0 = zeros(24);
     T0([1,2,3,5,6,7,8,9,10,12,13,14,15,16,17,20,21,22,24],:) = -M(:,20:end);
@@ -16,7 +18,7 @@ function S = red_73x97_rdist9p(C)
     T1([76,251,426,451,551]) = 1;
 
     [V,~] = eig(T0,T1);
-    S = V(20:23,:)./repmat(V(24,:),4,1);
+    S = V(20:23,:)./V(24,:);
     S = S(:,all(isfinite(S)));
 
 end

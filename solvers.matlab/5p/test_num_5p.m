@@ -1,23 +1,21 @@
 rng(23);
-N = 10000;
-nRoots = 10;
-iterRef = 0;
-
 stats = ini_stats('5p');
 stats.solver = 'red_10x20_5p';
+stats.nroots = 10;
+stats.ntrials = 10^4;
+stats.iterref = 0;
 
-for i = 1:N
+for i = 1:stats.ntrials
 
     tic;
     data = inidata_num_5p();
     [C,U,dU] = coefs_5p(data);
 
     S = feval(stats.solver,C);
-    if isempty(S); continue; end
-    [S,Ir,e] = validate_roots(S,C,U,dU,nRoots,iterRef);
+    [S,Ir,e] = validate_roots(S,C,U,dU,stats.nroots,stats.iterref);
 
     stats.tm = [stats.tm toc];
-    stats = update_stats_o(stats,Ir,e);
+    stats = update_stats(stats,Ir,e);
 
 end
 

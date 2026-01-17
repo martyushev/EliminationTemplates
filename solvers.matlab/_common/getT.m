@@ -1,4 +1,4 @@
-% get action matrix
+% get action matrix for column-pivoting solvers
 function T = getT(M,RP,B,xP)
 
     d = length(B);
@@ -7,5 +7,5 @@ function T = getT(M,RP,B,xP)
         r = RP==xP(B(i));
         if ~r; T(i,B==xP(B(i))) = 1; else; T(i,:) = M(r,:); end
     end
-    
+
 end

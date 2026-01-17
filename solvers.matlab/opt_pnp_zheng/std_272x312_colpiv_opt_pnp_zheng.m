@@ -1,4 +1,5 @@
 % Input: coefficient matrix C of size 4x24
+% Output: solution matrix S of size 4x40
 
 function S = std_272x312_colpiv_opt_pnp_zheng(C)
 
@@ -29,9 +30,6 @@ function S = std_272x312_colpiv_opt_pnp_zheng(C)
 
     [V,~] = eig(T);
     S = V(36:39,:)./repmat(V(40,:),4,1);
-
-    I = ~isnan(S(1,:)) & ~isinf(S(1,:));
-    %I = I & ~imag(S(1,:)); % uncomment this line for real roots only
-    S = S(:,I);
+    S = S(:,all(isfinite(S)));
 
 end

@@ -6,20 +6,25 @@ include("red_11x26_focal6p.jl")
 function test_num_focal6p()
 
     Random.seed!(23)
-    N = 10000
-    d = 15
-
     stats = ini_stats("focal6p")
+    stats.solver = "red_11x26_focal6p"
+    stats.nroots = 15
+    stats.ntrials = 10^4
+    stats.iterref = 0
 
-    for i in 1:N
-        data = inidata_num_focal6p()
-        C,U = coefs_focal6p(data)
+    for i in 1:stats.ntrials
 
-        toc = @elapsed S = red_11x26_focal6p(C)
+        toc = @elapsed begin
+            data = inidata_num_focal6p()
+            C,U,dU = coefs_focal6p(data)
+
+            S = eval(Meta.parse(stats.solver))(C)
+            S,Ir,e = validate_roots(S,C,U,dU,stats.nroots,stats.iterref)
+        end
+
         stats.tm = [stats.tm; toc]
-        if isempty(S); continue; end
+        stats = update_stats(stats,Ir,e)
 
-        stats = update_stats(stats,S,C,U,d)
     end
 
     disp_stats(stats)

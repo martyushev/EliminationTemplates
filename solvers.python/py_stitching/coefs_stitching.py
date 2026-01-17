@@ -1,6 +1,7 @@
 import numpy as np
 
 def coefs_stitching(data):
+
     c1 = data[0].T.flat
     c2 = data[1].T.flat
 
@@ -38,9 +39,12 @@ def coefs_stitching(data):
     C.flat[30] = c2[14]
     C.flat[31] = c2[15]
 
-    C = C/np.sqrt(np.sum(C*np.conj(C),axis=1,keepdims=True))
+    C = C/np.linalg.norm(C,axis=1,keepdims=True)
 
-    def U(x,y):
-        return np.array([x**6*y**3,x**5*y**3,x**4*y**3,x**4*y**2,y**3*x**3,y**2*x**3,y**3*x**2,y**2*x**2,y**3*x,y*x**2,y**2*x,y**3,x*y,y**2,y,1])
+    def U(s):
+        return np.array([s[0]**6*s[1]**3,s[0]**5*s[1]**3,s[0]**4*s[1]**3,s[0]**4*s[1]**2,s[0]**3*s[1]**3,s[0]**3*s[1]**2,s[1]**3*s[0]**2,s[0]**2*s[1]**2,s[0]*s[1]**3,s[1]*s[0]**2,s[0]*s[1]**2,s[1]**3,s[1]*s[0],s[1]**2,s[1],1])
 
-    return C,U
+    def dU(s):
+        return np.column_stack([[6*s[0]**5*s[1]**3,5*s[0]**4*s[1]**3,4*s[0]**3*s[1]**3,4*s[0]**3*s[1]**2,3*s[1]**3*s[0]**2,3*s[0]**2*s[1]**2,2*s[0]*s[1]**3,2*s[0]*s[1]**2,s[1]**3,2*s[1]*s[0],s[1]**2,0,s[1],0,0,0],[3*s[0]**6*s[1]**2,3*s[0]**5*s[1]**2,3*s[0]**4*s[1]**2,2*s[0]**4*s[1],3*s[0]**3*s[1]**2,2*s[0]**3*s[1],3*s[0]**2*s[1]**2,2*s[1]*s[0]**2,3*s[0]*s[1]**2,s[0]**2,2*s[1]*s[0],3*s[1]**2,s[0],2*s[1],1,0]])
+
+    return C,U,dU

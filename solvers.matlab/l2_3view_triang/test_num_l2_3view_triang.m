@@ -1,20 +1,21 @@
 rng(23);
-N = 10000;
-d = 31;
-
 stats = ini_stats('l2_3view_triang');
+stats.solver = 'red_190x227_l2_3view_triang';
+stats.nroots = 31;
+stats.ntrials = 10^4;
+stats.iterref = 0;
 
-for i = 1:N
+for i = 1:stats.ntrials
 
+    tic;
     data = inidata_num_l2_3view_triang();
     [C,U,dU] = coefs_l2_3view_triang(data);
 
-    tic;
-    S = red_190x227_l2_3view_triang(C);
-    stats.tm = [stats.tm toc];
-    if isempty(S); continue; end
+    S = feval(stats.solver,C);
+    [S,Ir,e] = validate_roots(S,C,U,dU,stats.nroots,stats.iterref);
 
-    [stats,~] = update_stats(stats,S,C,U,dU,d,'iterRef',0);
+    stats.tm = [stats.tm toc];
+    stats = update_stats(stats,Ir,e);
 
 end
 

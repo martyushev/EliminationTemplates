@@ -17,5 +17,5 @@ function plot_histo_num(stats,saveHist)
         folder = fileparts(which('add_all.m'));
         print(gcf,'-dpdf',strcat(folder,'\_results\histo_num_', stats.name, '.pdf'));
     end
-    
+
 end
